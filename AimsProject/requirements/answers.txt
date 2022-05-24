@@ -1,0 +1,2 @@
+1. Java always passes arguments by value, not by reference
+2. The return type of this method should be string
