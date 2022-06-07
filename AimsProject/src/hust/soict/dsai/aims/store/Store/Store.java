@@ -1,3 +1,22 @@
+<<<<<<< HEAD
+package hust.soict.dsai.aims.store.Store;
+import java.util.ArrayList;
+import hust.soict.dsai.aims.cart.Cart.Cart;
+import hust.soict.dsai.aims.media.Media;
+
+public class Store {
+	static Cart cart = new Cart();
+	private static ArrayList<Media> itemsInStore = new ArrayList<Media>();
+	
+	public void addMedia(Media media) {
+		itemsInStore.add(media);
+	}
+	
+	public void removeMedia(Media media) {
+		itemsInStore.remove(media);
+	}
+}
+=======
 package hust.soict.dsai.aims.store.Store;
 import java.util.ArrayList;
 import java.util.List;
@@ -158,3 +177,4 @@ public class Store {
 		
 	}
 }
+>>>>>>> 72acdd27e81236a6775ba922af00d451ad39b784
