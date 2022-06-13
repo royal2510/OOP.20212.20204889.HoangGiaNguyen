@@ -3,7 +3,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;    
 
-public class DigitalVideoDisc extends Disc implements Playable{
+public class DigitalVideoDisc extends Disc implements Playable {
 	private LocalDate dateAdded;
 	private static int nbMedia = 0;
 
@@ -44,6 +44,14 @@ public class DigitalVideoDisc extends Disc implements Playable{
 		List<String> titleToken = Arrays.asList(title.split(" "));
 	    List<String> wordsList = Arrays.asList(words);
 	    return wordsList.stream().allMatch(titleToken::contains);
+	}
+	
+	public void toString(DigitalVideoDisc dvd) {
+		System.out.println("Title: " + this.getTitle());
+		System.out.println("Category: " + this.getCategory());
+		System.out.println("Director: " + this.getDirector());
+		System.out.println("Length: " + this.getLength());
+		System.out.println("Cost: $" + this.getCost());
 	}
 	
 	private String director; 

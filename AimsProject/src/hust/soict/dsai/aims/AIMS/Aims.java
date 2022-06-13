@@ -1,6 +1,7 @@
-package hust.soict.dsai.aims.AIMS;
+package hust.soict.dsai.aims.Aims;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 import hust.soict.dsai.aims.cart.Cart.Cart;
@@ -8,10 +9,11 @@ import hust.soict.dsai.aims.media.Book;
 import hust.soict.dsai.aims.media.CompactDisc;
 import hust.soict.dsai.aims.media.DigitalVideoDisc;
 import hust.soict.dsai.aims.media.Media;
+import hust.soict.dsai.aims.media.Track;
 import hust.soict.dsai.aims.store.Store.Store;
 
 public class Aims {
-	static ArrayList<Media> itemsInStore = new ArrayList<Media>();;
+	static ArrayList<Media> itemsInStore = new ArrayList<Media>();
 	static Cart anOrder = new Cart();
 	static Store store = new Store();
 	
@@ -24,18 +26,27 @@ public class Aims {
 		DigitalVideoDisc dvd3 = new DigitalVideoDisc("Aladin", "Animation", 18.99f); 
 		itemsInStore.add(dvd3);
 		
+		Track track1 = new Track("One", 10);
+		Track track2 = new Track("Two", 20);
+		
 		CompactDisc cd1 = new CompactDisc("Rise Sun");
+		cd1.addTrack(track1);
+		cd1.addTrack(track2);
+		System.out.println(cd1);
 		itemsInStore.add(cd1);
 		
 		System.out.println("Total cost is: " + anOrder.totalCost()); 
+		
 		//MemoryDaemon daemon = new MemoryDaemon ();
-				//daemon.run(); 
+		//daemon.run(); 
 		Thread daemon = new Thread(); 
 		daemon.setDaemon(true); 
-		daemon.start();
+		daemon.start(); 
 		showMenu();
+
+
 	}
-	public static void print(){ 
+	public static void print(){
 		
 		System.out.println("***********************Store*********************** \nAvailable Items:\n");
 		for (int i = 0; i < itemsInStore.size(); i++) {
@@ -74,22 +85,72 @@ public class Aims {
 			System.out.println("Add or Remove ?(Choose 0/1)");
 			int chosen = keyboard.nextInt();
 			if (chosen == 0) {
-				System.out.println("Input the media's title: ");
-				keyboard.nextLine();
-				String title = keyboard.nextLine();
-				System.out.println("Input the media's category: ");
-				String category = keyboard.nextLine(); 
-				System.out.println("Input the media's director: ");
-				String director = keyboard.nextLine(); 
-				System.out.println("Input the media's length: ");
-				int length = keyboard.nextInt();
-				System.out.println("Input the media's cost: ");
-				float cost = keyboard.nextFloat();
-
-				itemsInStore.add(new Media(title, category, director,length, cost));
+				while(true) {
+					System.out.println("What type of media you want to add?\n1. DVD\n2. CD\n3. Book\nPlease choose (1-3)!");
+					int choice = keyboard.nextInt();
+					if(choice == 1) {
+						System.out.println("Input the dvd's title: ");
+						keyboard.nextLine();
+						String title = keyboard.nextLine();
+						System.out.println("Input the dvd's category: ");
+						String category = keyboard.nextLine(); 
+						System.out.println("Input the dvd's director: ");
+						String director = keyboard.nextLine(); 
+						System.out.println("Input the dvd's length: ");
+						int length = keyboard.nextInt();
+						System.out.println("Input the dvd's cost: ");
+						float cost = keyboard.nextFloat();
+						itemsInStore.add(new DigitalVideoDisc(title, category, director,length, cost));
+						System.out.println("The dvd named " + title +" is successfully added to the store");
+						break;
+					}
+					if(choice == 2) {
+						System.out.println("Input the cd's title: ");
+						keyboard.nextLine();
+						String title = keyboard.nextLine();
+						System.out.println("Input the cd's category: ");
+						String category = keyboard.nextLine(); 
+						System.out.println("Input the cd's director: ");
+						String director = keyboard.nextLine(); 
+						System.out.println("Input the cd's length: ");
+						int length = keyboard.nextInt();
+						System.out.println("Input the cd's cost: ");
+						float cost = keyboard.nextFloat();
+						System.out.println("Input the cd's artist: ");
+						String artist = keyboard.nextLine(); 
+						itemsInStore.add(new CompactDisc(title, category, director,cost, length, artist));
+						System.out.println("The cd named " + title +" is successfully added to the store");
+						break;
+					}
+					if(choice == 3) {
+						
+						System.out.println("Input the book's title: ");
+						keyboard.nextLine();
+						String title = keyboard.nextLine();
+						System.out.println("Input the book's category: ");
+						String category = keyboard.nextLine(); 
+						System.out.println("Input the book's cost: ");
+						float cost = keyboard.nextFloat();
+						List<String> authors = new ArrayList<String>();
+						System.out.println("The number of authors: ");
+						int nbAuthors = keyboard.nextInt();
+						String next = keyboard.nextLine();
+						for(int i = 0; i < nbAuthors; i++) {
+							System.out.println("Author " + (i+1) + " name is: ");
+							String author =keyboard.nextLine();
+							authors.add(author);
+						}
+						
+						itemsInStore.add(new Book(title, category,cost, authors));
+						System.out.println("The cd named " + title +" is successfully added to the store");
+						break;
+					}
+					else {
+						System.out.print("Invalid input. Please try again !");
+					}
+				}
 				print();
 				showMenu();
-				break;
 			}
 			if (chosen == 1) {
 				System.out.println("Choose the title that you want to remove: ");
@@ -134,6 +195,29 @@ public class Aims {
 			System.out.println("We don't have media named " + title + " available in our store");
 		}
 		storeMenu();
+	}
+	
+	public static void playMedia() {
+		System.out.println("Playable items: ");
+		for(int i = 0; i < anOrder.itemsOrdered.size(); i++) {
+			if(!anOrder.itemsOrdered.get(i).getClass().getSimpleName().equals("Book")) {				
+				System.out.println((i+1) + " - (" + anOrder.itemsOrdered.get(i).getClass().getSimpleName() + ") - " + anOrder.itemsOrdered.get(i).getTitle());
+			}
+		}
+		Scanner keyboard = new Scanner(System.in);
+		System.out.println("Input the media's title you wanna play: ");
+		String title = keyboard.nextLine();
+		boolean found = false;
+		for(int j = 0; j < anOrder.itemsOrdered.size(); j++) {
+			if(title.equals(anOrder.itemsOrdered.get(j).getTitle()) && !anOrder.itemsOrdered.get(j).getClass().getSimpleName().equals("Book") ) {
+				anOrder.itemsOrdered.get(j).play();
+				found = true;
+			}
+		}
+		if(found == false){
+				System.out.println("No media found !");
+		}
+		cartMenu();
 	}
 	
 	public static void showMenu() {
@@ -205,31 +289,16 @@ public class Aims {
 		System.out.println("-----------------------------------"); 
 		System.out.println("1. Filter Media in cart"); 
 		System.out.println("2. Sort Media in cart"); 
-		System.out.println("3. Remove Media from cart"); 
-		System.out.println("4. Place order"); 
+		System.out.println("3. Play Media"); 
+		System.out.println("4. Remove Media from cart"); 
+		System.out.println("5. Place order"); 
 		System.out.println("0. Back"); 
 		System.out.println("-----------------------------------"); 
 		System.out.println("Please choose a number: 0-1-2-3-4");
 		
 		int choice = keyboard.nextInt();
 		while (true) {
-			if(choice == 2) {
-				System.out.println("choose sort method \n1.sort by title\n2.sort by cost\n choose(1 or 2)");
-				int chosen = keyboard.nextInt();
-				if (chosen == 1) {
-					Cart.cartSortByTitle(Cart.itemsOrdered);
-					break;
-				}
-				if (chosen == 2) {
-					Cart.cartSortByCost(Cart.itemsOrdered);
-					break;
-				}
-				else {
-					System.out.println("choose 1 or 2 only");
-				}
-				cartMenu();
-				break;
-			}
+			
 			if(choice == 0) {
 				showMenu();
 				break;
@@ -239,25 +308,55 @@ public class Aims {
 				cartMenu();
 				break;
 			}
+			if(choice == 2) {
+				while(true) {
+					System.out.println("Choose sort method:\n1.By title\n2.By cost\nChoose (1-2)");
+					int chosen = keyboard.nextInt();
+					if (chosen == 1) {
+						Cart.cartSortByTitle(Cart.itemsOrdered);
+						break;
+					}
+					if (chosen == 2) {
+						Cart.cartSortByCost(Cart.itemsOrdered);
+						break;
+					}
+					else {
+						System.out.println("Please choose 1 or 2 only");
+					}
+				}
+				cartMenu();
+			}
+			
 			if(choice == 3) {
+				playMedia();
+				break;
+			}
+			
+			if(choice == 4) {
 				Cart.remove();
 				cartMenu();
 				break;
 			}
-			if(choice == 4) {
-				if (Cart.itemsOrdered.size() >= 5) {
-					System.out.println("the lucky media is:" + anOrder.getALuckyItem().getTitle());
-					System.out.println("Total cost:" + (anOrder.totalCost()-anOrder.getALuckyItem().getCost()));
+			if(choice == 5) {
+				if(Cart.itemsOrdered.size() > 4) {
+					System.out.println("Your lucky media is: " + anOrder.getALuckyItem().getTitle());
+					System.out.print("Total cost: $" + (anOrder.totalCost() - anOrder.getALuckyItem().getCost()));
 					System.exit(1);
 				}
 				else {
-					System.out.println("Total cost:"+anOrder.totalCost());
-					System.exit(1);
-				}
+					System.out.print("Total cost: $" + anOrder.totalCost());
+					System.out.println("\nIf you buy " + (5-Cart.itemsOrdered.size()) + " more media, you will get a lucky box.\nDo you want to continue shopping ?\nPress 0 to continue shopping\nPress 1 to exit");
+					int choice1 = keyboard.nextInt();
+					if(choice1 == 0) {
+						storeMenu();
+					}
+					if (choice == 1) {
+						System.exit(1);	
+				}	
 				break;
-			}
-		}	
+				}
+			}	
+		}
 	}
 }
-
 
