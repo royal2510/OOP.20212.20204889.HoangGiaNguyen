@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hust.soict.dsai.javafx.PainterController">
+   <left>
+      <VBox fx:id="drawingAreaPane" maxHeight="1.7976931348623157E308" prefHeight="200.0" prefWidth="100.0" spacing="8.0" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets right="8.0" />
+         </BorderPane.margin>
+         <children>
+            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clearButtonPressed" text="Clear" />
+         </children>
+      </VBox>
+   </left>
+   <center>
+      <Pane onMouseDragged="#drawingAreaMouseDragged" prefHeight="703.0" prefWidth="702.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER" />
+   </center>
+</BorderPane>
